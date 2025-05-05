@@ -34,13 +34,20 @@ class NetworkApiServices extends BaseApiServices {
     dynamic responseJson;
     try {
       final response = await http
-          .post(Uri.parse(url), body: jsonEncode(data))
+          .post(Uri.parse(url),
+              headers: {
+                'x-api-key': 'reqres-free-v1',
+              },
+              body: data)
           .timeout(const Duration(seconds: 20));
       responseJson = returnJson(response);
     } on SocketException {
       throw InternetException('');
     } on RequestTimeOut {
       throw RequestTimeOut('');
+    }
+    if (kDebugMode) {
+      print(responseJson);
     }
     return responseJson;
   }
@@ -51,7 +58,9 @@ class NetworkApiServices extends BaseApiServices {
         dynamic responseJson = jsonDecode(response.body);
         return responseJson;
       case 400:
-        return InvalidUrlException();
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
+      // return InvalidUrlException();
       default:
         return FetchDataException(
             'Error while Communication ${response.statusCode}');
