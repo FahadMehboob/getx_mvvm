@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:getx_mvvm/res/routes/route_names.dart';
+import 'package:getx_mvvm/view/home/home_screen.dart';
 import 'package:getx_mvvm/view/login/login_screen.dart';
 import 'package:getx_mvvm/view/splahs_screen.dart';
 
@@ -17,11 +18,11 @@ class AppRoutes {
           transitionDuration: const Duration(milliseconds: 250),
           transition: Transition.leftToRightWithFade,
         ),
-        // GetPage(
-        //   name: RouteName.homeView,
-        //   page: () => HomeView(),
-        //   transitionDuration: Duration(milliseconds: 250),
-        //   transition: Transition.leftToRightWithFade,
-        // ),
+        GetPage(
+          name: RouteNames.homeScreen,
+          page: () => const HomeScreen(),
+          transitionDuration: const Duration(milliseconds: 250),
+          transition: Transition.leftToRightWithFade,
+        ),
       ];
 }
