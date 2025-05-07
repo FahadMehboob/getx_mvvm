@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_mvvm/data/response/status.dart';
 import 'package:getx_mvvm/res/routes/route_names.dart';
 import 'package:getx_mvvm/view_model/controller/home/home_controller.dart';
 import 'package:getx_mvvm/view_model/controller/user_preferences/user_preferences.dart';
@@ -19,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     homeController.userListApi();
   }
@@ -46,9 +46,35 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         title: const Text("Home Screen"),
       ),
-      body: Column(
-        children: [],
-      ),
+      body: Obx(() {
+        switch (homeController.rxRequest.value) {
+          case Status.loading:
+            return const Center(child: CircularProgressIndicator());
+          case Status.error:
+            return const Text("Something Went Wrong !!!");
+          case Status.completed:
+            return ListView.builder(
+              itemCount: homeController.userListModel.value.data!.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(homeController
+                        .userListModel.value.data![index].firstName
+                        .toString()),
+                    subtitle: Text(homeController
+                        .userListModel.value.data![index].email
+                        .toString()),
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(homeController
+                          .userListModel.value.data![index].avatar
+                          .toString()),
+                    ),
+                  ),
+                );
+              },
+            );
+        }
+      }),
     );
   }
 }
